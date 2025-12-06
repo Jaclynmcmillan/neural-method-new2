@@ -1,328 +1,187 @@
-import React, { useEffect } from 'react';
-import { useParams, Navigate, Link } from 'react-router-dom';
-import { Palette, Layers, Code, Smartphone, Cpu, Workflow, Briefcase, ArrowRight, CheckCircle2, Zap, Layout as LayoutIcon, ExternalLink } from 'lucide-react';
-import Button from '../components/Button';
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, ChevronDown, Phone } from 'lucide-react';
+import { NavChild } from '../types';
+import Logo from './Logo';
 
-// Solution Data
-const solutionsData: Record<string, {
-  title: string;
-  subtitle: string;
-  description: string;
-  icon: any;
-  features: string[];
-  process: { title: string; desc: string }[];
-  featuredWork?: {
-    title: string;
-    description: string;
-    image: string;
-    link: string;
-  };
-}> = {
-  'brand-identity': {
-    title: 'Brand Identity',
-    subtitle: 'Visual Systems That Define Authority',
-    description: 'We build cohesive, adaptable brand identities that communicate your core values instantly. From logo design to comprehensive visual guidelines, we ensure your brand stands out in a crowded digital landscape.',
-    icon: Palette,
-    features: [
-      'Strategic Logo Design',
-      'Typography & Color Systems',
-      'Brand Voice & Tone Guidelines',
-      'Marketing Collateral',
-      'Design Systems for UI/UX'
-    ],
-    process: [
-      { title: 'Discovery', desc: 'Deep dive into your market, competitors, and core values.' },
-      { title: 'Concept', desc: 'Exploration of visual directions and metaphors.' },
-      { title: 'Refinement', desc: 'Polishing the chosen direction into a scalable system.' },
-      { title: 'Delivery', desc: 'Handover of all assets and usage guidelines.' }
-    ]
-  },
-  'web-design': {
-    title: 'Web Design',
-    subtitle: 'Immersive Digital Experiences',
-    description: 'We design high-converting landing pages and marketing sites that merge aesthetics with usability. Our designs are built to engage users, reduce bounce rates, and drive clear action.',
-    icon: LayoutIcon,
-    features: [
-      'High-Fidelity UI/UX Design',
-      'Interactive Prototyping',
-      'Conversion Rate Optimization',
-      'Responsive Layouts',
-      'Micro-animations & Interactions'
-    ],
-    process: [
-      { title: 'Wireframing', desc: 'Structuring the user journey and information architecture.' },
-      { title: 'Visual Design', desc: 'Applying brand aesthetics with modern UI trends.' },
-      { title: 'Interaction', desc: 'Adding motion and behavior to bring the interface to life.' },
-      { title: 'Handoff', desc: 'Pixel-perfect specs for development teams.' }
-    ],
-    featuredWork: {
-      title: "Vanguard Architecture Portfolio",
-      description: "A minimal, high-impact portfolio site for an award-winning architecture firm, featuring immersive WebGL transitions and a custom CMS.",
-      image: "https://picsum.photos/1600/900?random=1",
-      link: "#"
-    }
-  },
-  'web-app-development': {
-    title: 'Web App Development',
-    subtitle: 'Scalable Full-Stack Engineering',
-    description: 'We engineer robust, scalable web applications using modern stacks like React, TypeScript, and Node.js. Our focus is on performance, security, and maintainability.',
-    icon: Code,
-    features: [
-      'Single Page Applications (SPA)',
-      'SaaS Platform Development',
-      'API Development & Integration',
-      'Real-time Functionality',
-      'Cloud Infrastructure Setup'
-    ],
-    process: [
-      { title: 'Architecture', desc: 'Defining the tech stack and database schema.' },
-      { title: 'Development', desc: 'Agile sprints with regular code reviews.' },
-      { title: 'Testing', desc: 'Automated and manual testing for bug-free deployment.' },
-      { title: 'Launch', desc: 'CI/CD pipeline setup and production release.' }
-    ],
-    featuredWork: {
-      title: "FinStream Analytics Dashboard",
-      description: "A real-time financial data visualization platform handling millions of data points with sub-second latency.",
-      image: "https://picsum.photos/1600/900?random=2",
-      link: "#"
-    }
-  },
-  'app-development': {
-    title: 'App Development',
-    subtitle: 'Native & Cross-Platform Solutions',
-    description: 'We build high-performance mobile applications for iOS and Android. Whether native or cross-platform, we ensure a seamless, native-feeling experience for your users.',
-    icon: Smartphone,
-    features: [
-      'React Native / Flutter Development',
-      'Native iOS (Swift) & Android (Kotlin)',
-      'App Store Optimization',
-      'Offline Functionality',
-      'Push Notifications & Analytics'
-    ],
-    process: [
-      { title: 'UX Mobile Strategy', desc: 'Optimizing flows for touch interfaces.' },
-      { title: 'Development', desc: 'Building the app with performance in mind.' },
-      { title: 'Beta Testing', desc: 'Testflight/Play Console distribution for feedback.' },
-      { title: 'Publishing', desc: 'Handling submission and approval processes.' }
-    ],
-    featuredWork: {
-      title: "Aura Health Companion",
-      description: "A cross-platform wellness application with biometric integration, personalized AI coaching, and social features.",
-      image: "https://picsum.photos/1600/900?random=3",
-      link: "#"
-    }
-  },
-  'custom-ai-platform': {
-    title: 'Custom AI Platform',
-    subtitle: 'Intelligence Tailored to Your Data',
-    description: 'We develop bespoke AI platforms that leverage your unique data to solve specific business problems. From predictive analytics to generative content engines, we build secure, private AI infrastructure.',
-    icon: Cpu,
-    features: [
-      'Custom LLM Fine-tuning',
-      'RAG (Retrieval-Augmented Generation)',
-      'Secure Data Pipelines',
-      'Internal AI Tools & Dashboards',
-      'Enterprise-grade Security'
-    ],
-    process: [
-      { title: 'Data Audit', desc: 'Assessing your data readiness and quality.' },
-      { title: 'Model Selection', desc: 'Choosing the right foundation models for the task.' },
-      { title: 'Integration', desc: 'Embedding the AI into your existing workflows.' },
-      { title: 'Optimization', desc: 'Continuous learning and performance tuning.' }
-    ]
-  },
-  'ai-integrations': {
-    title: 'AI Integrations',
-    subtitle: 'Automate & Accelerate',
-    description: 'We integrate powerful AI capabilities into your existing software ecosystem. Automate repetitive tasks, enhance customer support with chatbots, and unlock insights from your unstructured data.',
-    icon: Workflow,
-    features: [
-      'Intelligent Chatbots & Assistants',
-      'Workflow Automation Agents',
-      'Voice & Image Processing',
-      'CRM & ERP AI Augmentation',
-      'API-first Integration'
-    ],
-    process: [
-      { title: 'Opportunity Map', desc: 'Identifying high-ROI automation targets.' },
-      { title: 'Prototyping', desc: 'Quick proof-of-concept implementation.' },
-      { title: 'Deployment', desc: 'Rolling out integration with monitoring.' },
-      { title: 'Scaling', desc: 'Expanding capabilities based on usage data.' }
-    ]
-  },
-  'fractional-talent': {
-    title: 'Fractional Talent',
-    subtitle: 'On-Demand Senior Expertise',
-    description: 'Access top-tier engineering and AI talent without the overhead of full-time hires. Our fractional experts integrate seamlessly with your team to lead projects, audit code, or accelerate roadmaps.',
-    icon: Briefcase,
-    features: [
-      'Senior Full-Stack Engineers',
-      'AI/ML Specialists',
-      'Product Managers & Designers',
-      'Technical Leadership (CTO-as-a-Service)',
-      'Code Audits & Architecture Reviews'
-    ],
-    process: [
-      { title: 'Needs Assessment', desc: 'Understanding your technical gaps.' },
-      { title: 'Matching', desc: 'Pairing you with the right expert for the job.' },
-      { title: 'Onboarding', desc: 'Rapid integration into your communication channels.' },
-      { title: 'Execution', desc: 'Immediate impact on your deliverables.' }
-    ]
-  },
-};
+const solutions: NavChild[] = [
+  { label: 'Brand Identity', description: 'Logo, typography, visual systems', path: '/solutions/brand-identity' },
+  { label: 'Web Design', description: 'Landing pages, marketing sites', path: '/solutions/web-design' },
+  { label: 'Web App Development', description: 'Full-stack React/TS apps', path: '/solutions/web-app-development' },
+  { label: 'App Development', description: 'iOS/Android native & cross-platform', path: '/solutions/app-development' },
+  { label: 'Custom AI Platform', description: 'AI for any use case', path: '/solutions/custom-ai-platform' },
+  { label: 'AI Integrations', description: 'Automation, workflows, chatbots', path: '/solutions/ai-integrations' },
+  { label: 'Fractional Talent', description: 'On-demand engineering & AI experts', path: '/solutions/fractional-talent' },
+];
 
-const Solution: React.FC = () => {
-  const { slug } = useParams<{ slug: string }>();
-  
-  // Scroll to top on mount/change
+const Navbar: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false); // Desktop dropdown state
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false); // Mobile dropdown state
+  const location = useLocation();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside (Desktop only)
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [slug]);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-  if (!slug || !solutionsData[slug]) {
-    return <Navigate to="/" replace />;
-  }
+  // Close menus on route change
+  useEffect(() => {
+    setIsOpen(false);
+    setDropdownOpen(false);
+    setMobileDropdownOpen(false);
+  }, [location]);
 
-  const data = solutionsData[slug];
-  const Icon = data.icon;
+  const handleMobileLinkClick = () => {
+    setIsOpen(false);
+    setDropdownOpen(false);
+    setMobileDropdownOpen(false);
+  };
 
   return (
-    <div key={slug} className="bg-primary min-h-screen">
-      {/* Hero */}
-      <section className="relative pt-24 pb-20 px-4 sm:px-6 lg:px-8 border-b border-secondary/50 overflow-hidden">
-        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center p-3 bg-secondary/50 rounded-xl mb-6 text-accent border border-white/5 shadow-lg">
-              <Icon className="w-8 h-8" />
+    <nav className="fixed w-full z-50 bg-primary/95 backdrop-blur-md border-b border-secondary/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          
+          {/* Logo */}
+          <Link 
+            to="/" 
+            className="flex items-center space-x-3 group"
+            onClick={() => {
+              window.scrollTo(0, 0);
+              setIsOpen(false);
+            }}
+          >
+            <Logo className="w-10 h-10 group-hover:scale-105 transition-transform duration-300" />
+            <span className="font-montserrat font-bold text-2xl tracking-tight text-white group-hover:text-white/90 transition-colors">Neural Method</span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            <div className="flex items-center text-neutral-light/80 hover:text-accent transition-colors text-sm font-medium">
+              <Phone className="w-4 h-4 mr-2" />
+              <span>+1 (555) 123-4567</span>
             </div>
-            <h1 className="font-montserrat font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white mb-6 leading-tight">
-              {data.title}
-            </h1>
-            <p className="font-montserrat font-medium text-lg md:text-2xl text-accent mb-6">
-              {data.subtitle}
-            </p>
-            <p className="text-base sm:text-lg text-neutral-light/80 leading-relaxed max-w-2xl mx-auto mb-8">
-              {data.description}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/contact">
-                <Button size="lg" fullWidth className="sm:w-auto">Start a Project</Button>
+
+            {/* Solutions Dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className={`flex items-center font-medium transition-colors ${dropdownOpen ? 'text-accent' : 'text-neutral-light hover:text-accent'}`}
+              >
+                Solutions
+                <ChevronDown className={`ml-1 w-4 h-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute top-full right-0 mt-4 w-80 bg-secondary rounded-xl shadow-2xl border border-white/5 overflow-hidden animate-fade-in-down p-2">
+                  <div className="grid gap-1">
+                    {solutions.map((item) => (
+                      <Link
+                        key={item.label}
+                        to={item.path}
+                        className="block px-4 py-3 rounded-lg hover:bg-primary/50 group transition-colors"
+                      >
+                        <p className="text-sm font-semibold text-white group-hover:text-accent transition-colors">
+                          {item.label}
+                        </p>
+                        <p className="text-xs text-neutral-light/60 mt-0.5">
+                          {item.description}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <Link to="/about" className="text-neutral-light hover:text-accent font-medium transition-colors">
+              About
+            </Link>
+
+            <Link to="/contact" className="group">
+              <span className="px-5 py-2.5 rounded-full border border-accent text-accent group-hover:bg-accent group-hover:text-primary transition-all duration-300 font-semibold text-sm">
+                Contact
+              </span>
+            </Link>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-neutral-light hover:text-accent p-2 focus:outline-none"
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Navigation */}
+      {isOpen && (
+        <div className="md:hidden bg-primary border-t border-secondary h-[calc(100vh-5rem)] overflow-y-auto">
+          <div className="px-4 pt-4 pb-12 space-y-2">
+             <div className="flex items-center text-accent px-3 py-3 text-sm font-medium border-b border-white/5 mb-4">
+              <Phone className="w-4 h-4 mr-2" />
+              <span>+1 (555) 123-4567</span>
+            </div>
+            
+            <div className="space-y-1">
+              <button
+                onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
+                className="w-full text-left px-3 py-3 text-neutral-light hover:text-accent font-medium flex justify-between items-center rounded-lg hover:bg-white/5 transition-colors"
+              >
+                Solutions
+                <ChevronDown className={`w-4 h-4 transition-transform ${mobileDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {mobileDropdownOpen && (
+                <div className="pl-4 space-y-1 bg-white/5 rounded-lg my-2 py-2 animate-fade-in">
+                  {solutions.map((item) => (
+                    <Link
+                      key={item.label}
+                      to={item.path}
+                      onClick={handleMobileLinkClick}
+                      className="block px-3 py-2.5 text-sm text-neutral-light/90 hover:text-accent border-l-2 border-transparent hover:border-accent transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <Link
+              to="/about"
+              onClick={handleMobileLinkClick}
+              className="block px-3 py-3 text-neutral-light hover:text-accent font-medium rounded-lg hover:bg-white/5 transition-colors"
+            >
+              About
+            </Link>
+            
+            <div className="pt-4">
+              <Link
+                to="/contact"
+                onClick={handleMobileLinkClick}
+                className="block w-full text-center px-4 py-3 bg-accent text-primary font-bold rounded-lg hover:bg-white transition-colors"
+              >
+                Contact Us
               </Link>
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Featured Work Section - Only renders if featuredWork exists */}
-      {data.featuredWork && (
-        <section className="py-24 bg-secondary/20 border-b border-white/5">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-montserrat font-bold text-3xl text-white mb-12 flex items-center gap-3">
-              <Briefcase className="w-6 h-6 text-accent" />
-              Featured Project
-            </h2>
-            
-            <a 
-              href={data.featuredWork.link} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="group relative block rounded-2xl overflow-hidden border border-white/5 hover:border-accent/50 transition-all duration-300 transform hover:-translate-y-1"
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent opacity-80 z-10 transition-opacity duration-300 group-hover:opacity-50"></div>
-              
-              <img 
-                src={data.featuredWork.image} 
-                alt={data.featuredWork.title} 
-                className="w-full aspect-video md:h-[500px] object-cover transform transition-transform duration-700 group-hover:scale-105"
-              />
-              
-              <div className="absolute bottom-0 left-0 p-6 md:p-12 z-20 w-full">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8">
-                  <div>
-                    <span className="inline-block px-3 py-1 rounded-full bg-accent text-primary text-xs font-bold uppercase tracking-wider mb-4">
-                      Recent Work
-                    </span>
-                    <h3 className="font-montserrat font-bold text-2xl md:text-4xl text-white mb-3 group-hover:text-accent transition-colors">
-                      {data.featuredWork.title}
-                    </h3>
-                    <p className="text-base md:text-lg text-neutral-light/90 max-w-2xl">
-                      {data.featuredWork.description}
-                    </p>
-                  </div>
-                  
-                  <div className="hidden md:flex bg-white/10 backdrop-blur-md p-4 rounded-full text-white group-hover:bg-accent group-hover:text-primary transition-all duration-300 shrink-0">
-                    <ExternalLink className="w-8 h-8" />
-                  </div>
-                </div>
-              </div>
-            </a>
-            
-            <p className="text-center text-neutral-light/50 text-sm mt-6">
-              * Click the image to view the live project.
-            </p>
-          </div>
-        </section>
       )}
-
-      {/* Features & Process */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-            {/* Features */}
-            <div>
-              <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-white mb-8 flex items-center gap-3">
-                <Zap className="w-6 h-6 text-accent" />
-                Capabilities
-              </h2>
-              <div className="grid gap-4">
-                {data.features.map((feature, idx) => (
-                  <div key={idx} className="flex items-start gap-4 p-4 rounded-xl bg-secondary/30 border border-white/5 hover:border-accent/30 transition-colors">
-                    <CheckCircle2 className="w-5 h-5 text-accent mt-0.5 shrink-0" />
-                    <span className="text-neutral-light font-medium">{feature}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Process */}
-            <div>
-              <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-white mb-8 flex items-center gap-3">
-                <Layers className="w-6 h-6 text-accent" />
-                Our Process
-              </h2>
-              <div className="space-y-8 relative before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-0.5 before:bg-secondary">
-                {data.process.map((step, idx) => (
-                  <div key={idx} className="relative pl-12">
-                    <div className="absolute left-0 top-0 w-8 h-8 rounded-full bg-primary border-2 border-accent text-accent flex items-center justify-center font-bold text-sm z-10">
-                      {idx + 1}
-                    </div>
-                    <h3 className="font-montserrat font-bold text-xl text-white mb-2">{step.title}</h3>
-                    <p className="text-neutral-light/60">{step.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 bg-secondary/30 border-t border-white/5">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-montserrat font-bold text-2xl sm:text-3xl text-white mb-6">Ready to scale your vision?</h2>
-          <p className="text-lg text-neutral-light/70 mb-8">
-            Let's discuss how our {data.title.toLowerCase()} expertise can accelerate your growth.
-          </p>
-          <Link to="/contact">
-            <Button size="lg" className="w-full sm:w-auto">
-              Get in Touch <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-          </Link>
-        </div>
-      </section>
-    </div>
+    </nav>
   );
 };
 
-export default Solution;
+export default Navbar;
