@@ -187,7 +187,7 @@ const Solution: React.FC = () => {
   const Icon = data.icon;
 
   return (
-    <div className="bg-primary min-h-screen">
+    <div key={slug} className="bg-primary min-h-screen">
       {/* Hero */}
       <section className="relative pt-24 pb-20 px-4 sm:px-6 lg:px-8 border-b border-secondary/50 overflow-hidden">
         <div className="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -196,7 +196,7 @@ const Solution: React.FC = () => {
             <div className="inline-flex items-center justify-center p-3 bg-secondary/50 rounded-xl mb-6 text-accent border border-white/5 shadow-lg">
               <Icon className="w-8 h-8" />
             </div>
-            <h1 className="font-montserrat font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white mb-6">
+            <h1 className="font-montserrat font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white mb-6 leading-tight">
               {data.title}
             </h1>
             <p className="font-montserrat font-medium text-lg md:text-2xl text-accent mb-6">
@@ -227,14 +227,14 @@ const Solution: React.FC = () => {
               href={data.featuredWork.link} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="group relative block rounded-2xl overflow-hidden border border-white/5 hover:border-accent/50 transition-all duration-300"
+              className="group relative block rounded-2xl overflow-hidden border border-white/5 hover:border-accent/50 transition-all duration-300 transform hover:-translate-y-1"
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent opacity-60 z-10 transition-opacity duration-300 group-hover:opacity-40"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent opacity-80 z-10 transition-opacity duration-300 group-hover:opacity-50"></div>
               
               <img 
                 src={data.featuredWork.image} 
                 alt={data.featuredWork.title} 
-                className="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover transform transition-transform duration-700 group-hover:scale-105"
+                className="w-full aspect-video md:h-[500px] object-cover transform transition-transform duration-700 group-hover:scale-105"
               />
               
               <div className="absolute bottom-0 left-0 p-6 md:p-12 z-20 w-full">
@@ -291,7 +291,7 @@ const Solution: React.FC = () => {
                 <Layers className="w-6 h-6 text-accent" />
                 Our Process
               </h2>
-              <div className="space-y-8 relative before:absolute before:left-3.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-secondary">
+              <div className="space-y-8 relative before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-0.5 before:bg-secondary">
                 {data.process.map((step, idx) => (
                   <div key={idx} className="relative pl-12">
                     <div className="absolute left-0 top-0 w-8 h-8 rounded-full bg-primary border-2 border-accent text-accent flex items-center justify-center font-bold text-sm z-10">
