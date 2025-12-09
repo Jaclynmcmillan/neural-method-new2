@@ -1,86 +1,147 @@
 import React from 'react';
-import { Target, Zap, Shield, Rocket } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Monitor, Smartphone, Users, Palette, Code, Cpu, Workflow, Layers, Briefcase } from 'lucide-react';
+import Button from '../components/Button';
+import ServiceCard from '../components/ServiceCard';
 
-const About: React.FC = () => {
+const Home: React.FC = () => {
   return (
-    <div className="bg-primary pt-12 pb-24">
-      {/* Header */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
-        <div className="border-l-4 border-accent pl-6 sm:pl-8 py-2">
-           <p className="font-inter font-medium italic text-lg sm:text-xl md:text-2xl text-neutral-light leading-relaxed">
-            "Neural Method is a modern studio blending strategic design, product engineering, and AI innovation. We build scalable brands, intelligent digital experiences, and high-performing systems for founders and teams who want to accelerate growth without complexity."
-          </p>
-        </div>
-      </section>
+    <>
+      {/* Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden bg-[url('https://picsum.photos/1920/1080?grayscale&blur=2')] bg-cover bg-center">
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-primary/90"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
+        
+        {/* Decorative Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_70%)]"></div>
 
-      {/* Image Strip - Panoramic Style */}
-      <section className="w-full h-64 md:h-96 mb-24 overflow-hidden relative group">
-        <img 
-          src="https://picsum.photos/1920/600?grayscale" 
-          alt="Neural Method Office Panorama" 
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-        />
-        <div className="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-500"></div>
-      </section>
-
-      {/* Core Values */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
-        <h2 className="font-montserrat font-bold text-3xl text-white mb-12">What We Believe</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div className="flex gap-6">
-            <div className="w-12 h-12 rounded bg-secondary flex items-center justify-center shrink-0 text-accent">
-              <Target className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="font-montserrat font-bold text-xl text-white mb-2">Precision Over Noise</h3>
-              <p className="text-neutral-light/70">We don't do fluff. Every pixel, line of code, and strategy is engineered for a specific outcome. We value clarity and directness in our work and communication.</p>
-            </div>
+        <div className="relative max-w-7xl mx-auto w-full pt-12 pb-24 text-center z-10">
+          <div className="inline-block mb-6 px-4 py-1.5 rounded-full border border-accent/30 bg-accent/10 backdrop-blur-sm">
+            <span className="text-accent text-[10px] sm:text-xs font-semibold tracking-wide uppercase">The Future of Digital Building</span>
           </div>
           
-          <div className="flex gap-6">
-             <div className="w-12 h-12 rounded bg-secondary flex items-center justify-center shrink-0 text-accent">
-              <Zap className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="font-montserrat font-bold text-xl text-white mb-2">Velocity with Stability</h3>
-              <p className="text-neutral-light/70">Speed matters, but not at the cost of breaking things. We build systems designed to scale from day one, ensuring you move fast without technical debt.</p>
-            </div>
+          <h1 className="font-montserrat font-bold text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-white mb-8 tracking-tight">
+            We blend <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-blue-400">intelligence</span><br />
+            and methodology.
+          </h1>
+          
+          <p className="text-lg sm:text-xl md:text-2xl text-neutral-light/80 max-w-3xl mx-auto mb-12 font-light leading-relaxed px-2">
+            Neural Method is a hybrid creative + technical agency building products, brands, and systems that scale.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-20">
+            <Link to="/contact" className="w-full sm:w-auto">
+              <Button size="lg" fullWidth className="sm:w-auto">Start Your Project</Button>
+            </Link>
+            <Link to="/about" className="w-full sm:w-auto">
+              <Button variant="outline" size="lg" fullWidth className="sm:w-auto">Our Philosophy</Button>
+            </Link>
           </div>
 
-          <div className="flex gap-6">
-             <div className="w-12 h-12 rounded bg-secondary flex items-center justify-center shrink-0 text-accent">
-              <Rocket className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="font-montserrat font-bold text-xl text-white mb-2">Future-Proof Innovation</h3>
-              <p className="text-neutral-light/70">We stay ahead of the curve, integrating cutting-edge AI and tech stacks so our clients dominate their markets rather than just participating in them.</p>
-            </div>
-          </div>
+          {/* Quick Access Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
+            <Link to="/solutions/web-design" className="group bg-secondary/80 backdrop-blur-md p-6 rounded-xl border border-white/5 hover:border-accent hover:bg-secondary transition-all duration-300">
+              <div className="flex justify-between items-start mb-4">
+                <Monitor className="text-accent w-8 h-8" />
+                <span className="text-xs font-mono text-neutral-light/50 border border-white/10 px-2 py-1 rounded group-hover:border-accent/30 group-hover:text-accent transition-colors">WEB</span>
+              </div>
+              <h3 className="text-white font-bold text-lg mb-1 group-hover:text-accent transition-colors">Websites & Development</h3>
+              <div className="flex items-center text-sm text-neutral-light/60 group-hover:text-white transition-colors">
+                Explore Work <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
 
-           <div className="flex gap-6">
-             <div className="w-12 h-12 rounded bg-secondary flex items-center justify-center shrink-0 text-accent">
-              <Shield className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="font-montserrat font-bold text-xl text-white mb-2">Reliability as a Feature</h3>
-              <p className="text-neutral-light/70">Trust is our currency. We deliver on time, on budget, and to spec. No excuses, just high-quality execution that you can depend on.</p>
-            </div>
+            <Link to="/solutions/app-development" className="group bg-secondary/80 backdrop-blur-md p-6 rounded-xl border border-white/5 hover:border-accent hover:bg-secondary transition-all duration-300">
+              <div className="flex justify-between items-start mb-4">
+                <Smartphone className="text-accent w-8 h-8" />
+                <span className="text-xs font-mono text-neutral-light/50 border border-white/10 px-2 py-1 rounded group-hover:border-accent/30 group-hover:text-accent transition-colors">APP</span>
+              </div>
+              <h3 className="text-white font-bold text-lg mb-1 group-hover:text-accent transition-colors">App Development</h3>
+              <div className="flex items-center text-sm text-neutral-light/60 group-hover:text-white transition-colors">
+                Explore Apps <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
+            <Link to="/solutions/fractional-talent" className="group bg-secondary/80 backdrop-blur-md p-6 rounded-xl border border-white/5 hover:border-accent hover:bg-secondary transition-all duration-300">
+              <div className="flex justify-between items-start mb-4">
+                <Users className="text-accent w-8 h-8" />
+                <span className="text-xs font-mono text-neutral-light/50 border border-white/10 px-2 py-1 rounded group-hover:border-accent/30 group-hover:text-accent transition-colors">TEAM</span>
+              </div>
+              <h3 className="text-white font-bold text-lg mb-1 group-hover:text-accent transition-colors">Fractional Talent</h3>
+              <div className="flex items-center text-sm text-neutral-light/60 group-hover:text-white transition-colors">
+                Hire Experts <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Our Story */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="font-montserrat font-bold text-3xl text-white mb-8">Our Story</h2>
-        <p className="text-lg text-neutral-light/80 leading-relaxed mb-6">
-          Neural Method began with a simple observation: the gap between "creative agencies" and "engineering shops" was widening. Brands looked great but didn't function well, or products worked perfectly but felt soulless.
-        </p>
-        <p className="text-lg text-neutral-light/80 leading-relaxed">
-          We founded Neural Method to close that gap. By merging top-tier aesthetic methodology with rigorous engineering and AI capability, we created a new kind of studio—one that understands that in the modern era, <strong>brand is code, and code is brand.</strong>
-        </p>
+      {/* Services Section */}
+      <section id="services" className="py-24 bg-primary relative">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-montserrat font-bold text-3xl sm:text-4xl text-white mb-4">Our Methodology</h2>
+            <p className="text-neutral-light/70 max-w-2xl mx-auto text-lg">
+              We provide end-to-end digital solutions, from visual identity to complex AI infrastructure.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <ServiceCard 
+              title="Brand Identity" 
+              description="Strategic logo design, typography selection, and comprehensive visual systems that communicate authority."
+              Icon={Palette}
+            />
+            <ServiceCard 
+              title="Web Design" 
+              description="High-converting landing pages and immersive marketing sites designed for impact and retention."
+              Icon={Layers}
+            />
+            <ServiceCard 
+              title="Web App Development" 
+              description="Scalable, full-stack React/TypeScript applications built for performance and maintainability."
+              Icon={Code}
+            />
+            <ServiceCard 
+              title="App Development" 
+              description="Native and cross-platform mobile experiences for iOS and Android that users love."
+              Icon={Smartphone}
+            />
+            <ServiceCard 
+              title="Custom AI Platforms" 
+              description="Tailored AI solutions for your specific business use case, built on secure and scalable infrastructure."
+              Icon={Cpu}
+            />
+            <ServiceCard 
+              title="AI Integrations" 
+              description="Seamless automation workflows, intelligent chatbots, and data processing pipelines."
+              Icon={Workflow}
+            />
+            <div className="md:col-span-2 lg:col-span-3">
+              <div className="group bg-gradient-to-br from-secondary to-[#1a2530] p-6 sm:p-8 rounded-xl border border-white/5 hover:border-accent/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(56,182,255,0.05)] flex flex-col md:flex-row items-center gap-6 md:gap-8">
+                <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center text-accent border border-white/5 shadow-lg shrink-0">
+                  <Briefcase className="w-8 h-8" />
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="font-montserrat text-2xl font-bold text-white mb-2 group-hover:text-accent transition-colors">
+                    Fractional Engineering Talent
+                  </h3>
+                  <p className="text-neutral-light/70 text-lg">
+                    Need on-demand expertise? We deploy senior engineers and AI specialists to integrate with your team and accelerate your roadmap.
+                  </p>
+                </div>
+                <Link to="/contact" className="w-full md:w-auto">
+                  <Button variant="outline" fullWidth className="md:w-auto">Inquire Now</Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
-    </div>
+    </>
   );
 };
 
-export default About;
+export default Home;
