@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, Phone } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { NavChild } from '../types';
 import Logo from './Logo';
 
@@ -65,11 +65,7 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <div className="flex items-center text-neutral-light/80 hover:text-accent transition-colors text-sm font-medium">
-              <Phone className="w-4 h-4 mr-2" />
-              <span>+1 (555) 123-4567</span>
-            </div>
-
+            
             {/* Solutions Dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
@@ -130,10 +126,6 @@ const Navbar: React.FC = () => {
       {isOpen && (
         <div className="md:hidden bg-primary border-t border-secondary h-[calc(100vh-5rem)] overflow-y-auto">
           <div className="px-4 pt-4 pb-12 space-y-2">
-             <div className="flex items-center text-accent px-3 py-3 text-sm font-medium border-b border-white/5 mb-4">
-              <Phone className="w-4 h-4 mr-2" />
-              <span>+1 (555) 123-4567</span>
-            </div>
             
             <div className="space-y-1">
               <button
