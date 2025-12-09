@@ -1,328 +1,147 @@
-import React, { useEffect } from 'react';
-import { useParams, Navigate, Link } from 'react-router-dom';
-import { Palette, Layers, Code, Smartphone, Cpu, Workflow, Briefcase, ArrowRight, CheckCircle2, Zap, Layout as LayoutIcon, ExternalLink } from 'lucide-react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Monitor, Smartphone, Users, Palette, Code, Cpu, Workflow, Layers, Briefcase } from 'lucide-react';
 import Button from '../components/Button';
+import ServiceCard from '../components/ServiceCard';
 
-// Solution Data
-const solutionsData: Record<string, {
-  title: string;
-  subtitle: string;
-  description: string;
-  icon: any;
-  features: string[];
-  process: { title: string; desc: string }[];
-  featuredWork?: {
-    title: string;
-    description: string;
-    image: string;
-    link: string;
-  };
-}> = {
-  'brand-identity': {
-    title: 'Brand Identity',
-    subtitle: 'Visual Systems That Define Authority',
-    description: 'We build cohesive, adaptable brand identities that communicate your core values instantly. From logo design to comprehensive visual guidelines, we ensure your brand stands out in a crowded digital landscape.',
-    icon: Palette,
-    features: [
-      'Strategic Logo Design',
-      'Typography & Color Systems',
-      'Brand Voice & Tone Guidelines',
-      'Marketing Collateral',
-      'Design Systems for UI/UX'
-    ],
-    process: [
-      { title: 'Discovery', desc: 'Deep dive into your market, competitors, and core values.' },
-      { title: 'Concept', desc: 'Exploration of visual directions and metaphors.' },
-      { title: 'Refinement', desc: 'Polishing the chosen direction into a scalable system.' },
-      { title: 'Delivery', desc: 'Handover of all assets and usage guidelines.' }
-    ]
-  },
-  'web-design': {
-    title: 'Web Design',
-    subtitle: 'Immersive Digital Experiences',
-    description: 'We design high-converting landing pages and marketing sites that merge aesthetics with usability. Our designs are built to engage users, reduce bounce rates, and drive clear action.',
-    icon: LayoutIcon,
-    features: [
-      'High-Fidelity UI/UX Design',
-      'Interactive Prototyping',
-      'Conversion Rate Optimization',
-      'Responsive Layouts',
-      'Micro-animations & Interactions'
-    ],
-    process: [
-      { title: 'Wireframing', desc: 'Structuring the user journey and information architecture.' },
-      { title: 'Visual Design', desc: 'Applying brand aesthetics with modern UI trends.' },
-      { title: 'Interaction', desc: 'Adding motion and behavior to bring the interface to life.' },
-      { title: 'Handoff', desc: 'Pixel-perfect specs for development teams.' }
-    ],
-    featuredWork: {
-      title: "Vanguard Architecture Portfolio",
-      description: "A minimal, high-impact portfolio site for an award-winning architecture firm, featuring immersive WebGL transitions and a custom CMS.",
-      image: "https://picsum.photos/1600/900?random=1",
-      link: "#"
-    }
-  },
-  'web-app-development': {
-    title: 'Web App Development',
-    subtitle: 'Scalable Full-Stack Engineering',
-    description: 'We engineer robust, scalable web applications using modern stacks like React, TypeScript, and Node.js. Our focus is on performance, security, and maintainability.',
-    icon: Code,
-    features: [
-      'Single Page Applications (SPA)',
-      'SaaS Platform Development',
-      'API Development & Integration',
-      'Real-time Functionality',
-      'Cloud Infrastructure Setup'
-    ],
-    process: [
-      { title: 'Architecture', desc: 'Defining the tech stack and database schema.' },
-      { title: 'Development', desc: 'Agile sprints with regular code reviews.' },
-      { title: 'Testing', desc: 'Automated and manual testing for bug-free deployment.' },
-      { title: 'Launch', desc: 'CI/CD pipeline setup and production release.' }
-    ],
-    featuredWork: {
-      title: "FinStream Analytics Dashboard",
-      description: "A real-time financial data visualization platform handling millions of data points with sub-second latency.",
-      image: "https://picsum.photos/1600/900?random=2",
-      link: "#"
-    }
-  },
-  'app-development': {
-    title: 'App Development',
-    subtitle: 'Native & Cross-Platform Solutions',
-    description: 'We build high-performance mobile applications for iOS and Android. Whether native or cross-platform, we ensure a seamless, native-feeling experience for your users.',
-    icon: Smartphone,
-    features: [
-      'React Native / Flutter Development',
-      'Native iOS (Swift) & Android (Kotlin)',
-      'App Store Optimization',
-      'Offline Functionality',
-      'Push Notifications & Analytics'
-    ],
-    process: [
-      { title: 'UX Mobile Strategy', desc: 'Optimizing flows for touch interfaces.' },
-      { title: 'Development', desc: 'Building the app with performance in mind.' },
-      { title: 'Beta Testing', desc: 'Testflight/Play Console distribution for feedback.' },
-      { title: 'Publishing', desc: 'Handling submission and approval processes.' }
-    ],
-    featuredWork: {
-      title: "Aura Health Companion",
-      description: "A cross-platform wellness application with biometric integration, personalized AI coaching, and social features.",
-      image: "https://picsum.photos/1600/900?random=3",
-      link: "#"
-    }
-  },
-  'custom-ai-platform': {
-    title: 'Custom AI Platform',
-    subtitle: 'Intelligence Tailored to Your Data',
-    description: 'We develop bespoke AI platforms that leverage your unique data to solve specific business problems. From predictive analytics to generative content engines, we build secure, private AI infrastructure.',
-    icon: Cpu,
-    features: [
-      'Custom LLM Fine-tuning',
-      'RAG (Retrieval-Augmented Generation)',
-      'Secure Data Pipelines',
-      'Internal AI Tools & Dashboards',
-      'Enterprise-grade Security'
-    ],
-    process: [
-      { title: 'Data Audit', desc: 'Assessing your data readiness and quality.' },
-      { title: 'Model Selection', desc: 'Choosing the right foundation models for the task.' },
-      { title: 'Integration', desc: 'Embedding the AI into your existing workflows.' },
-      { title: 'Optimization', desc: 'Continuous learning and performance tuning.' }
-    ]
-  },
-  'ai-integrations': {
-    title: 'AI Integrations',
-    subtitle: 'Automate & Accelerate',
-    description: 'We integrate powerful AI capabilities into your existing software ecosystem. Automate repetitive tasks, enhance customer support with chatbots, and unlock insights from your unstructured data.',
-    icon: Workflow,
-    features: [
-      'Intelligent Chatbots & Assistants',
-      'Workflow Automation Agents',
-      'Voice & Image Processing',
-      'CRM & ERP AI Augmentation',
-      'API-first Integration'
-    ],
-    process: [
-      { title: 'Opportunity Map', desc: 'Identifying high-ROI automation targets.' },
-      { title: 'Prototyping', desc: 'Quick proof-of-concept implementation.' },
-      { title: 'Deployment', desc: 'Rolling out integration with monitoring.' },
-      { title: 'Scaling', desc: 'Expanding capabilities based on usage data.' }
-    ]
-  },
-  'fractional-talent': {
-    title: 'Fractional Talent',
-    subtitle: 'On-Demand Senior Expertise',
-    description: 'Access top-tier engineering and AI talent without the overhead of full-time hires. Our fractional experts integrate seamlessly with your team to lead projects, audit code, or accelerate roadmaps.',
-    icon: Briefcase,
-    features: [
-      'Senior Full-Stack Engineers',
-      'AI/ML Specialists',
-      'Product Managers & Designers',
-      'Technical Leadership (CTO-as-a-Service)',
-      'Code Audits & Architecture Reviews'
-    ],
-    process: [
-      { title: 'Needs Assessment', desc: 'Understanding your technical gaps.' },
-      { title: 'Matching', desc: 'Pairing you with the right expert for the job.' },
-      { title: 'Onboarding', desc: 'Rapid integration into your communication channels.' },
-      { title: 'Execution', desc: 'Immediate impact on your deliverables.' }
-    ]
-  },
-};
-
-const Solution: React.FC = () => {
-  const { slug } = useParams<{ slug: string }>();
-  
-  // Scroll to top on mount/change
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [slug]);
-
-  if (!slug || !solutionsData[slug]) {
-    return <Navigate to="/" replace />;
-  }
-
-  const data = solutionsData[slug];
-  const Icon = data.icon;
-
+const Home: React.FC = () => {
   return (
-    <div key={slug} className="bg-primary min-h-screen">
-      {/* Hero */}
-      <section className="relative pt-24 pb-20 px-4 sm:px-6 lg:px-8 border-b border-secondary/50 overflow-hidden">
-        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center p-3 bg-secondary/50 rounded-xl mb-6 text-accent border border-white/5 shadow-lg">
-              <Icon className="w-8 h-8" />
-            </div>
-            <h1 className="font-montserrat font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white mb-6 leading-tight">
-              {data.title}
-            </h1>
-            <p className="font-montserrat font-medium text-lg md:text-2xl text-accent mb-6">
-              {data.subtitle}
-            </p>
-            <p className="text-base sm:text-lg text-neutral-light/80 leading-relaxed max-w-2xl mx-auto mb-8">
-              {data.description}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/contact">
-                <Button size="lg" fullWidth className="sm:w-auto">Start a Project</Button>
-              </Link>
-            </div>
+    <>
+      {/* Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden bg-[url('https://picsum.photos/1920/1080?grayscale&blur=2')] bg-cover bg-center">
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-primary/90"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
+        
+        {/* Decorative Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_70%)]"></div>
+
+        <div className="relative max-w-7xl mx-auto w-full pt-12 pb-24 text-center z-10">
+          <div className="inline-block mb-6 px-4 py-1.5 rounded-full border border-accent/30 bg-accent/10 backdrop-blur-sm">
+            <span className="text-accent text-[10px] sm:text-xs font-semibold tracking-wide uppercase">The Future of Digital Building</span>
           </div>
-        </div>
-      </section>
-
-      {/* Featured Work Section - Only renders if featuredWork exists */}
-      {data.featuredWork && (
-        <section className="py-24 bg-secondary/20 border-b border-white/5">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-montserrat font-bold text-3xl text-white mb-12 flex items-center gap-3">
-              <Briefcase className="w-6 h-6 text-accent" />
-              Featured Project
-            </h2>
-            
-            <a 
-              href={data.featuredWork.link} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="group relative block rounded-2xl overflow-hidden border border-white/5 hover:border-accent/50 transition-all duration-300 transform hover:-translate-y-1"
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent opacity-80 z-10 transition-opacity duration-300 group-hover:opacity-50"></div>
-              
-              <img 
-                src={data.featuredWork.image} 
-                alt={data.featuredWork.title} 
-                className="w-full aspect-video md:h-[500px] object-cover transform transition-transform duration-700 group-hover:scale-105"
-              />
-              
-              <div className="absolute bottom-0 left-0 p-6 md:p-12 z-20 w-full">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8">
-                  <div>
-                    <span className="inline-block px-3 py-1 rounded-full bg-accent text-primary text-xs font-bold uppercase tracking-wider mb-4">
-                      Recent Work
-                    </span>
-                    <h3 className="font-montserrat font-bold text-2xl md:text-4xl text-white mb-3 group-hover:text-accent transition-colors">
-                      {data.featuredWork.title}
-                    </h3>
-                    <p className="text-base md:text-lg text-neutral-light/90 max-w-2xl">
-                      {data.featuredWork.description}
-                    </p>
-                  </div>
-                  
-                  <div className="hidden md:flex bg-white/10 backdrop-blur-md p-4 rounded-full text-white group-hover:bg-accent group-hover:text-primary transition-all duration-300 shrink-0">
-                    <ExternalLink className="w-8 h-8" />
-                  </div>
-                </div>
-              </div>
-            </a>
-            
-            <p className="text-center text-neutral-light/50 text-sm mt-6">
-              * Click the image to view the live project.
-            </p>
-          </div>
-        </section>
-      )}
-
-      {/* Features & Process */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-            {/* Features */}
-            <div>
-              <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-white mb-8 flex items-center gap-3">
-                <Zap className="w-6 h-6 text-accent" />
-                Capabilities
-              </h2>
-              <div className="grid gap-4">
-                {data.features.map((feature, idx) => (
-                  <div key={idx} className="flex items-start gap-4 p-4 rounded-xl bg-secondary/30 border border-white/5 hover:border-accent/30 transition-colors">
-                    <CheckCircle2 className="w-5 h-5 text-accent mt-0.5 shrink-0" />
-                    <span className="text-neutral-light font-medium">{feature}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Process */}
-            <div>
-              <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-white mb-8 flex items-center gap-3">
-                <Layers className="w-6 h-6 text-accent" />
-                Our Process
-              </h2>
-              <div className="space-y-8 relative before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-0.5 before:bg-secondary">
-                {data.process.map((step, idx) => (
-                  <div key={idx} className="relative pl-12">
-                    <div className="absolute left-0 top-0 w-8 h-8 rounded-full bg-primary border-2 border-accent text-accent flex items-center justify-center font-bold text-sm z-10">
-                      {idx + 1}
-                    </div>
-                    <h3 className="font-montserrat font-bold text-xl text-white mb-2">{step.title}</h3>
-                    <p className="text-neutral-light/60">{step.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 bg-secondary/30 border-t border-white/5">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-montserrat font-bold text-2xl sm:text-3xl text-white mb-6">Ready to scale your vision?</h2>
-          <p className="text-lg text-neutral-light/70 mb-8">
-            Let's discuss how our {data.title.toLowerCase()} expertise can accelerate your growth.
+          
+          <h1 className="font-montserrat font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white mb-8 tracking-tight leading-tight">
+            We blend <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-blue-400">intelligence</span><br className="hidden sm:block" />
+            and methodology.
+          </h1>
+          
+          <p className="text-lg sm:text-xl md:text-2xl text-neutral-light/80 max-w-3xl mx-auto mb-12 font-light leading-relaxed px-4">
+            Neural Method is a hybrid creative + technical agency building products, brands, and systems that scale.
           </p>
-          <Link to="/contact">
-            <Button size="lg" className="w-full sm:w-auto">
-              Get in Touch <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-          </Link>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-20">
+            <Link to="/contact" className="w-full sm:w-auto">
+              <Button size="lg" fullWidth className="sm:w-auto">Start Your Project</Button>
+            </Link>
+            <Link to="/about" className="w-full sm:w-auto">
+              <Button variant="outline" size="lg" fullWidth className="sm:w-auto">Our Philosophy</Button>
+            </Link>
+          </div>
+
+          {/* Quick Access Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
+            <Link to="/solutions/web-design" className="group bg-secondary/80 backdrop-blur-md p-6 rounded-xl border border-white/5 hover:border-accent hover:bg-secondary transition-all duration-300">
+              <div className="flex justify-between items-start mb-4">
+                <Monitor className="text-accent w-8 h-8" />
+                <span className="text-xs font-mono text-neutral-light/50 border border-white/10 px-2 py-1 rounded group-hover:border-accent/30 group-hover:text-accent transition-colors">WEB</span>
+              </div>
+              <h3 className="text-white font-bold text-lg mb-1 group-hover:text-accent transition-colors">Websites & Development</h3>
+              <div className="flex items-center text-sm text-neutral-light/60 group-hover:text-white transition-colors">
+                Explore Work <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
+            <Link to="/solutions/app-development" className="group bg-secondary/80 backdrop-blur-md p-6 rounded-xl border border-white/5 hover:border-accent hover:bg-secondary transition-all duration-300">
+              <div className="flex justify-between items-start mb-4">
+                <Smartphone className="text-accent w-8 h-8" />
+                <span className="text-xs font-mono text-neutral-light/50 border border-white/10 px-2 py-1 rounded group-hover:border-accent/30 group-hover:text-accent transition-colors">APP</span>
+              </div>
+              <h3 className="text-white font-bold text-lg mb-1 group-hover:text-accent transition-colors">App Development</h3>
+              <div className="flex items-center text-sm text-neutral-light/60 group-hover:text-white transition-colors">
+                Explore Apps <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
+            <Link to="/solutions/fractional-talent" className="group bg-secondary/80 backdrop-blur-md p-6 rounded-xl border border-white/5 hover:border-accent hover:bg-secondary transition-all duration-300">
+              <div className="flex justify-between items-start mb-4">
+                <Users className="text-accent w-8 h-8" />
+                <span className="text-xs font-mono text-neutral-light/50 border border-white/10 px-2 py-1 rounded group-hover:border-accent/30 group-hover:text-accent transition-colors">TEAM</span>
+              </div>
+              <h3 className="text-white font-bold text-lg mb-1 group-hover:text-accent transition-colors">Fractional Talent</h3>
+              <div className="flex items-center text-sm text-neutral-light/60 group-hover:text-white transition-colors">
+                Hire Experts <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+          </div>
         </div>
       </section>
-    </div>
+
+      {/* Services Section */}
+      <section id="services" className="py-24 bg-primary relative">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-montserrat font-bold text-3xl sm:text-4xl md:text-5xl text-white mb-4">Our Methodology</h2>
+            <p className="text-neutral-light/70 max-w-2xl mx-auto text-lg sm:text-xl">
+              We provide end-to-end digital solutions, from visual identity to complex AI infrastructure.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <ServiceCard 
+              title="Brand Identity" 
+              description="Strategic logo design, typography selection, and comprehensive visual systems that communicate authority."
+              Icon={Palette}
+            />
+            <ServiceCard 
+              title="Web Design" 
+              description="High-converting landing pages and immersive marketing sites designed for impact and retention."
+              Icon={Layers}
+            />
+            <ServiceCard 
+              title="Web App Development" 
+              description="Scalable, full-stack React/TypeScript applications built for performance and maintainability."
+              Icon={Code}
+            />
+            <ServiceCard 
+              title="App Development" 
+              description="Native and cross-platform mobile experiences for iOS and Android that users love."
+              Icon={Smartphone}
+            />
+            <ServiceCard 
+              title="Custom AI Platforms" 
+              description="Tailored AI solutions for your specific business use case, built on secure and scalable infrastructure."
+              Icon={Cpu}
+            />
+            <ServiceCard 
+              title="AI Integrations" 
+              description="Seamless automation workflows, intelligent chatbots, and data processing pipelines."
+              Icon={Workflow}
+            />
+            <div className="md:col-span-2 lg:col-span-3">
+              <div className="group bg-gradient-to-br from-secondary to-[#1a2530] p-6 sm:p-8 rounded-xl border border-white/5 hover:border-accent/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(56,182,255,0.05)] flex flex-col md:flex-row items-center gap-6 md:gap-8">
+                <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center text-accent border border-white/5 shadow-lg shrink-0">
+                  <Briefcase className="w-8 h-8" />
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="font-montserrat text-2xl font-bold text-white mb-2 group-hover:text-accent transition-colors">
+                    Fractional Engineering Talent
+                  </h3>
+                  <p className="text-neutral-light/70 text-lg">
+                    Need on-demand expertise? We deploy senior engineers and AI specialists to integrate with your team and accelerate your roadmap.
+                  </p>
+                </div>
+                <Link to="/contact" className="w-full md:w-auto">
+                  <Button variant="outline" fullWidth className="md:w-auto">Inquire Now</Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 };
 
-export default Solution;
+export default Home;
