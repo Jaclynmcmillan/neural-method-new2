@@ -83,17 +83,6 @@ const Contact: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Phone */}
-                <div className="flex items-start gap-5 group">
-                    <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center text-accent shrink-0 border border-white/5 group-hover:border-accent/30 transition-colors shadow-lg">
-                    <Phone className="w-6 h-6" />
-                    </div>
-                    <div>
-                    <p className="text-xs text-neutral-light/50 font-bold uppercase tracking-wider mb-1">Phone</p>
-                    <a href="tel:+15551234567" className="text-white hover:text-accent transition-colors text-lg font-medium block">+1 (555) 123-4567</a>
-                    </div>
-                </div>
-
                 {/* Location */}
                 <div className="flex items-start gap-5 group">
                     <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center text-accent shrink-0 border border-white/5 group-hover:border-accent/30 transition-colors shadow-lg">
