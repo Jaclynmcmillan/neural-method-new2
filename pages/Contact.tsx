@@ -66,8 +66,8 @@ const Contact: React.FC = () => {
 
         {/* Left Column: Contact Info */}
         <div className="flex flex-col justify-center relative z-10">
-            <h1 className="font-montserrat font-bold text-3xl md:text-5xl text-white mb-6">Let's Build Something<br/><span className="text-accent">Extraordinary.</span></h1>
-            <p className="text-neutral-light/70 text-lg mb-12">
+            <h1 className="font-montserrat font-bold text-4xl sm:text-5xl lg:text-6xl text-white mb-6">Let's Build Something<br/><span className="text-accent">Extraordinary.</span></h1>
+            <p className="text-neutral-light/70 text-lg sm:text-xl mb-12">
                 Ready to transform your vision into reality? Reach out to our team of experts and let's discuss your next project.
             </p>
 
@@ -117,7 +117,7 @@ const Contact: React.FC = () => {
         {/* Right Column: Form */}
         <div className="bg-primary/50 p-6 md:p-8 rounded-2xl border border-white/5 relative z-10">
             {submitStatus !== 'success' && (
-                <h2 className="font-montserrat font-bold text-2xl text-white mb-6">Send us a Message</h2>
+                <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-white mb-6">Send us a Message</h2>
             )}
             
             {submitStatus === 'success' ? (
