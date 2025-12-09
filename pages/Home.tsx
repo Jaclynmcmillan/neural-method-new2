@@ -21,12 +21,12 @@ const Home: React.FC = () => {
             <span className="text-accent text-[10px] sm:text-xs font-semibold tracking-wide uppercase">The Future of Digital Building</span>
           </div>
           
-          <h1 className="font-montserrat font-bold text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-white mb-8 tracking-tight">
-            We blend <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-blue-400">intelligence</span><br />
+          <h1 className="font-montserrat font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white mb-8 tracking-tight leading-tight">
+            We blend <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-blue-400">intelligence</span><br className="hidden sm:block" />
             and methodology.
           </h1>
           
-          <p className="text-lg sm:text-xl md:text-2xl text-neutral-light/80 max-w-3xl mx-auto mb-12 font-light leading-relaxed px-2">
+          <p className="text-lg sm:text-xl md:text-2xl text-neutral-light/80 max-w-3xl mx-auto mb-12 font-light leading-relaxed px-4">
             Neural Method is a hybrid creative + technical agency building products, brands, and systems that scale.
           </p>
           
@@ -82,8 +82,8 @@ const Home: React.FC = () => {
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="font-montserrat font-bold text-3xl sm:text-4xl text-white mb-4">Our Methodology</h2>
-            <p className="text-neutral-light/70 max-w-2xl mx-auto text-lg">
+            <h2 className="font-montserrat font-bold text-3xl sm:text-4xl md:text-5xl text-white mb-4">Our Methodology</h2>
+            <p className="text-neutral-light/70 max-w-2xl mx-auto text-lg sm:text-xl">
               We provide end-to-end digital solutions, from visual identity to complex AI infrastructure.
             </p>
           </div>
