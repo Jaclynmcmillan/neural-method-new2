@@ -18,10 +18,10 @@ const Home: React.FC = () => {
 
         <div className="relative max-w-7xl mx-auto w-full pt-12 pb-24 text-center z-10">
           <div className="inline-block mb-6 px-4 py-1.5 rounded-full border border-accent/30 bg-accent/10 backdrop-blur-sm">
-            <span className="text-accent text-xs sm:text-sm font-semibold tracking-wide uppercase">The Future of Digital Building</span>
+            <span className="text-accent text-[10px] sm:text-xs font-semibold tracking-wide uppercase">The Future of Digital Building</span>
           </div>
           
-          <h1 className="font-montserrat font-bold text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-white mb-8 tracking-tight">
+          <h1 className="font-montserrat font-bold text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-white mb-8 tracking-tight">
             We blend <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-blue-400">intelligence</span><br />
             and methodology.
           </h1>
