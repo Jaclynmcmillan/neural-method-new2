@@ -53,7 +53,7 @@ const Navbar: React.FC = () => {
           {/* Logo */}
           <Link 
             to="/" 
-            className="flex items-center space-x-3 group"
+            className="flex items-center space-x-3 group relative z-50"
             onClick={() => {
               window.scrollTo(0, 0);
               setIsOpen(false);
@@ -110,10 +110,10 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-neutral-light hover:text-accent p-2 focus:outline-none"
+              className="text-neutral-light hover:text-accent p-2 focus:outline-none relative z-50"
               aria-label="Toggle menu"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -124,16 +124,16 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Navigation */}
       {isOpen && (
-        <div className="md:hidden bg-primary border-t border-secondary h-[calc(100vh-5rem)] overflow-y-auto">
-          <div className="px-4 pt-4 pb-12 space-y-2">
+        <div className="fixed inset-0 top-20 z-40 md:hidden bg-primary border-t border-secondary overflow-y-auto">
+          <div className="flex flex-col px-4 pt-4 pb-12 space-y-2 h-full">
             
             <div className="space-y-1">
               <button
                 onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
-                className="w-full text-left px-3 py-3 text-neutral-light hover:text-accent font-medium flex justify-between items-center rounded-lg hover:bg-white/5 transition-colors"
+                className="w-full text-left px-3 py-4 text-lg text-neutral-light hover:text-accent font-medium flex justify-between items-center rounded-lg hover:bg-white/5 transition-colors border-b border-white/5"
               >
                 Solutions
-                <ChevronDown className={`w-4 h-4 transition-transform ${mobileDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-5 h-5 transition-transform ${mobileDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
               
               {mobileDropdownOpen && (
@@ -143,7 +143,7 @@ const Navbar: React.FC = () => {
                       key={item.label}
                       to={item.path}
                       onClick={handleMobileLinkClick}
-                      className="block px-3 py-2.5 text-sm text-neutral-light/90 hover:text-accent border-l-2 border-transparent hover:border-accent transition-colors"
+                      className="block px-3 py-3 text-sm text-neutral-light/90 hover:text-accent border-l-2 border-transparent hover:border-accent transition-colors"
                     >
                       {item.label}
                     </Link>
@@ -155,20 +155,22 @@ const Navbar: React.FC = () => {
             <Link
               to="/about"
               onClick={handleMobileLinkClick}
-              className="block px-3 py-3 text-neutral-light hover:text-accent font-medium rounded-lg hover:bg-white/5 transition-colors"
+              className="block px-3 py-4 text-lg text-neutral-light hover:text-accent font-medium rounded-lg hover:bg-white/5 transition-colors border-b border-white/5"
             >
               About
             </Link>
             
-            <div className="pt-4">
+            <div className="pt-6 mt-auto">
               <Link
                 to="/contact"
                 onClick={handleMobileLinkClick}
-                className="block w-full text-center px-4 py-3 bg-accent text-primary font-bold rounded-lg hover:bg-white transition-colors"
+                className="block w-full text-center px-4 py-4 bg-accent text-primary font-bold text-lg rounded-xl hover:bg-white transition-colors shadow-[0_0_15px_rgba(56,182,255,0.3)]"
               >
                 Contact Us
               </Link>
             </div>
+            
+            <div className="h-20"></div> {/* Spacer for bottom scroll */}
           </div>
         </div>
       )}
